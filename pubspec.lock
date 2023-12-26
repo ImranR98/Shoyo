@@ -131,7 +131,7 @@ packages:
     description:
       path: "."
       ref: main
-      resolved-ref: "19bc8d58b5ab348f4e3e0bea7dd156b18195aaec"
+      resolved-ref: ee2f8c2cde000dbbf4eb86704ed79496b8cd9e93
       url: "https://github.com/ImranR98/flutter_sharing_intent"
     source: git
     version: "1.1.0"
