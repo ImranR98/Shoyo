@@ -13,10 +13,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   path: ^1.8.3
   permission_handler: ^11.1.0
-  flutter_sharing_intent: # Original repo has text share bug on ^1.1.0 
-    git:
-      url: https://github.com/ImranR98/flutter_sharing_intent
-      ref: main
+  flutter_sharing_intent: ^1.1.1
   fluttertoast: ^8.2.4
   flutter_launcher_icons: ^0.13.1
 

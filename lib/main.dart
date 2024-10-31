@@ -68,9 +68,11 @@ class _MainPageState extends State<MainPage> {
           .map((a) => a.value ?? '')
           .where((f) => f.isNotEmpty)
           .toList();
-      String downloadsDir = '/storage/emulated/0/Download';
+
       results = await Future.wait(files.map((f) async {
         String fileName = basename(f);
+        String profileNumber = dirname(f).split('/')[3];
+        String downloadsDir = '/storage/emulated/$profileNumber/Download';
         try {
           File(f).copySync('$downloadsDir/$fileName');
           return MapEntry<String, String?>(fileName, null);
