@@ -71,8 +71,8 @@ class _MainPageState extends State<MainPage> {
 
       results = await Future.wait(files.map((f) async {
         String fileName = basename(f);
-        String profileNumber = dirname(f).split('/')[2];
-        String downloadsDir = '/storage/emulated/' + profileNumber + '/Download';
+        String profileNumber = dirname(f).split('/')[3];
+        String downloadsDir = '/storage/emulated/$profileNumber/Download';
         try {
           File(f).copySync('$downloadsDir/$fileName');
           return MapEntry<String, String?>(fileName, null);
