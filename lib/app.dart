@@ -5,7 +5,7 @@ import 'package:shoyo/services/settings_controller.dart';
 import 'package:shoyo/theme/app_theme.dart';
 import 'package:shoyo/theme/dynamic_color_bridge.dart';
 
-const String kAppVersion = '1.1.0';
+const String kAppVersion = '1.1.1';
 
 class ShoyoApp extends StatelessWidget {
   const ShoyoApp({super.key, required this.settings});

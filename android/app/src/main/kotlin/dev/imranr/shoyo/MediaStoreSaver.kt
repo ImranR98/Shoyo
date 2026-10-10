@@ -78,9 +78,6 @@ object MediaStoreSaver {
         allowProviderRename: Boolean,
     ): SaveResult {
         val source = File(sourcePath)
-        if (!source.exists()) {
-            throw SaveException("SOURCE_MISSING", "The shared file no longer exists")
-        }
         val resolver = context.contentResolver
         val mimeType = MimeTypeMap.getSingleton()
             .getMimeTypeFromExtension(source.extension.lowercase())
@@ -98,7 +95,7 @@ object MediaStoreSaver {
             val output = resolver.openOutputStream(uri)
                 ?: throw SaveException("IO_ERROR", "Could not open the destination file")
             output.use { out ->
-                FileInputStream(source).use { input -> input.copyTo(out) }
+                openSource(context, sourcePath).use { input -> input.copyTo(out) }
             }
             resolver.update(
                 uri,
@@ -116,6 +113,45 @@ object MediaStoreSaver {
             throw SaveException("CONFLICT", "A file with this name already exists")
         }
         return SaveResult(actualName)
+    }
+
+    /// Reads a shared file. [sourcePath] points either into the app cache or,
+    /// when the sharing app provided an external storage document, into shared
+    /// storage which the app cannot open directly. In that case the document
+    /// URI is reconstructed and read through the granted share permission.
+    private fun openSource(context: Context, sourcePath: String): java.io.InputStream {
+        try {
+            return FileInputStream(sourcePath)
+        } catch (e: java.io.IOException) {
+            // The app cannot read the path directly; try the content resolver.
+        }
+        val uri = externalStorageDocumentUri(context, sourcePath)
+            ?: throw SaveException("SOURCE_MISSING", "The shared file no longer exists")
+        return context.contentResolver.openInputStream(uri)
+            ?: throw SaveException("SOURCE_MISSING", "The shared file no longer exists")
+    }
+
+    private fun externalStorageDocumentUri(context: Context, path: String): android.net.Uri? {
+        @Suppress("DEPRECATION")
+        val primaryRoot = Environment.getExternalStorageDirectory().path
+        val candidates = mutableListOf(primaryRoot to "primary")
+        context.getExternalFilesDirs(null).forEach { dir ->
+            val dirPath = dir?.path ?: return@forEach
+            val root = dirPath.substringBefore("/Android/")
+            if (root != primaryRoot && root.contains('/')) {
+                candidates.add(root to root.substringAfterLast('/'))
+            }
+        }
+        for ((root, volume) in candidates) {
+            if (path == root || path.startsWith("$root/")) {
+                val docId = "$volume:${path.removePrefix(root).trimStart('/')}"
+                return android.provider.DocumentsContract.buildDocumentUri(
+                    "com.android.externalstorage.documents",
+                    docId,
+                )
+            }
+        }
+        return null
     }
 
     private fun actualDisplayName(context: Context, uri: android.net.Uri): String? {

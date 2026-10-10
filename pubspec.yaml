@@ -2,7 +2,7 @@ name: shoyo
 description: "Save files from the Android Share Sheet to local storage."
 publish_to: 'none'
 
-version: 1.1.0+5
+version: 1.1.1+6
 
 environment:
   sdk: ^3.13.0
