@@ -2,25 +2,25 @@ name: shoyo
 description: "Save files from the Android Share Sheet to local storage."
 publish_to: 'none'
 
-version: 1.0.3+4
+version: 1.1.0+5
 
 environment:
-  sdk: '>=3.2.3 <4.0.0'
+  sdk: ^3.13.0
 
 dependencies:
   flutter:
     sdk: flutter
-  cupertino_icons: ^1.0.2
-  path: ^1.8.3
-  permission_handler: ^11.1.0
-  flutter_sharing_intent: ^1.1.1
-  fluttertoast: ^8.2.4
-  flutter_launcher_icons: ^0.14.1
+  dynamic_color: ^2.1.0
+  flutter_sharing_intent: ^2.0.4
+  material_ui: ^1.6.0
+  path: ^1.9.1
+  shared_preferences: ^2.5.6
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^5.0.0
+  flutter_lints: ^6.0.0
+  flutter_launcher_icons: ^0.14.4
 
 flutter_launcher_icons:
   android: "ic_launcher"
